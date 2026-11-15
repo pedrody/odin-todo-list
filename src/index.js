@@ -2,8 +2,11 @@ import "./styles.css";
 import { Task } from "./task.js";
 import { ChecklistItem } from "./checklistItem.js";
 import { Column } from "./column.js";
+import { Project } from "./project.js";
 
-const myColumn = new Column("My first column", crypto.randomUUID());
+const myProject = new Project("My first project");
+
+const myColumn = new Column("My first column", myProject.id);
 
 const myTask = new Task(
     "my first task",
@@ -16,3 +19,4 @@ myTask.checklist.push(new ChecklistItem("second step"));
 
 console.log(myTask);
 console.log(myColumn);
+console.log(myProject)

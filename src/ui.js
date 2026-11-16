@@ -1,4 +1,5 @@
-import { getProjects, removeProject, addProject } from "./project.js";
+import { addColumn, getColumnsByProjectId } from "./column.js";
+import { getProjects, addProject, getProject } from "./project.js";
 
 export function renderProjects() {
     const projectsDiv = document.getElementById("projects");
@@ -11,12 +12,11 @@ export function renderProjects() {
         projectBtn.textContent = project.title;
         projectBtn.dataset.id = project.id;
 
-        // delete just to test
         projectBtn.addEventListener("click", (event) => {
-            const id = event.currentTarget.dataset.id;
-
-            removeProject(id);
+            const projectId = event.currentTarget.dataset.id;
             renderProjects();
+            setupContentHeader(projectId);
+            setupKanban(projectId);
         });
 
         projectsDiv.appendChild(projectBtn);
@@ -81,4 +81,48 @@ function createNewProjectForm() {
     newProjectForm.appendChild(formActions);
 
     return newProjectForm;
+}
+
+function setupContentHeader(projectId) {
+    const project = getProject(projectId);
+
+    const contentHeader = document.getElementById("content-header");
+    contentHeader.textContent = "";
+
+    const heading = document.createElement("h1");
+    heading.textContent = project.title;
+
+    const newColumnBtn = document.createElement("button");
+    newColumnBtn.textContent = "+ New column";
+    newColumnBtn.dataset.projectId = project.id;
+
+    newColumnBtn.addEventListener("click", () => {
+        const columnName = prompt("Column name:");
+
+        addColumn(columnName, project.id);
+
+        setupKanban(projectId);
+    });
+
+
+    contentHeader.appendChild(heading);
+    contentHeader.appendChild(newColumnBtn);
+}
+
+function setupKanban(projectId) {
+    const kanbanDiv = document.getElementById("kanban");
+    kanbanDiv.textContent = "";
+
+    const columns = getColumnsByProjectId(projectId);
+
+    columns.forEach((column) => {
+        const columnDiv = document.createElement("div");
+        columnDiv.classList.add("column");
+
+        const columnHeader = document.createElement("h1");
+        columnHeader.textContent = column.title;
+
+        columnDiv.appendChild(columnHeader);
+        kanbanDiv.appendChild(columnDiv);
+    });
 }

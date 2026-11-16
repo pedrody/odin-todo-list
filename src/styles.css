@@ -63,9 +63,15 @@ body {
     font-size: 1.2rem;
 }
 
-.kanban {
+#kanban {
     flex: 1;
     display: flex;
+    gap: 60px;
+}
+
+.column {
+    /* just to debug, remove later */
+    border: 1px solid black;
 }
 
 .sidebar-user {
@@ -90,4 +96,13 @@ body {
 .sidebar-actions {
     display: flex;
     flex-direction: column;
+}
+
+#content-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+#content-header h1 {
+    font-size: 3.4rem;
 }

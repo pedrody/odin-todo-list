@@ -1,5 +1,6 @@
 import { addColumn, getColumnsByProjectId } from "./column.js";
 import { getProjects, addProject, getProject } from "./project.js";
+import { addTask, getTasks } from "./task.js";
 
 export function renderProjects() {
     const projectsDiv = document.getElementById("projects");
@@ -97,6 +98,7 @@ function setupContentHeader(projectId) {
     newColumnBtn.dataset.projectId = project.id;
 
     newColumnBtn.addEventListener("click", () => {
+        // prompt is temporary, remove later
         const columnName = prompt("Column name:");
 
         addColumn(columnName, project.id);
@@ -116,13 +118,63 @@ function setupKanban(projectId) {
     const columns = getColumnsByProjectId(projectId);
 
     columns.forEach((column) => {
-        const columnDiv = document.createElement("div");
-        columnDiv.classList.add("column");
-
-        const columnHeader = document.createElement("h1");
-        columnHeader.textContent = column.title;
-
-        columnDiv.appendChild(columnHeader);
-        kanbanDiv.appendChild(columnDiv);
+        kanbanDiv.appendChild(createColumn(column));
     });
 }
+
+function createColumn(column) {
+    const columnDiv = document.createElement("div");
+    columnDiv.classList.add("column");
+
+    const columnHeader = document.createElement("h2");
+    columnHeader.textContent = column.title;
+
+    const newTaskBtn = document.createElement("button");
+    newTaskBtn.textContent = "+ New task";
+    newTaskBtn.addEventListener("click", () => {
+        // prompt is temporary, remove later
+        const title = prompt("Task title:");
+        const description = prompt("Task description:");
+
+        addTask(title, description, column.id);
+        renderTasks(tasksDiv, column.id);
+    });
+
+    const tasksDiv = document.createElement("div");
+    tasksDiv.classList.add("tasks");
+
+    columnDiv.appendChild(columnHeader);
+    columnDiv.appendChild(tasksDiv);
+    columnDiv.appendChild(newTaskBtn);
+
+    renderTasks(tasksDiv, column.id);
+
+    return columnDiv;
+}
+
+function renderTasks(tasksDiv, columnId) {
+    tasksDiv.textContent = "";
+
+    const tasks = getTasks().filter((task) => task.columnId === columnId);
+
+    tasks.forEach((task) => {
+        tasksDiv.appendChild(createTaskCard(task));
+    });
+}
+
+function createTaskCard(task) {
+    const taskCard = document.createElement("div");
+    taskCard.classList.add("task-card");
+
+    const title = document.createElement("h3");
+    title.textContent = task.title;
+
+    const description = document.createElement("p");
+    description.textContent = task.description;
+
+    taskCard.appendChild(title);
+    taskCard.appendChild(description);
+
+    return taskCard;
+}
+

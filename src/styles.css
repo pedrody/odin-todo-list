@@ -69,11 +69,6 @@ body {
     gap: 60px;
 }
 
-.column {
-    /* just to debug, remove later */
-    border: 1px solid black;
-}
-
 .sidebar-user {
     display: flex;
     align-items: center;

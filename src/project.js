@@ -26,3 +26,9 @@ export function addProject(title) {
 export function removeProject(id) {
     StorageController.remove(KEY, id, Project.fromJSON);
 }
+
+export function getProject(id) {
+    const projects = StorageController.get(KEY, Project.fromJSON);
+
+    return projects.find((p) => p.id === id);
+}

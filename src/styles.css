@@ -69,6 +69,12 @@ body {
     gap: 60px;
 }
 
+.column-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
 .sidebar-user {
     display: flex;
     align-items: center;

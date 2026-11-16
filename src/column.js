@@ -1,4 +1,5 @@
 import { StorageController } from "./storage.js";
+import { getTasks, removeTasksByColumnId } from "./task.js";
 
 const KEY = "columns";
 
@@ -27,3 +28,16 @@ export function addColumn(title, projectId) {
     columns.push(new Column(title, projectId));
     StorageController.add(KEY, columns);
 }
+
+export function removeColumn(columnId) {
+    const columns = getColumns();
+    const filteredColumns = columns.filter((column) => column.id !== columnId);
+
+    StorageController.add(KEY, filteredColumns);
+    removeTasksByColumnId(columnId);
+}
+
+
+
+
+

@@ -1,4 +1,4 @@
-import { addColumn, getColumnsByProjectId } from "./column.js";
+import { addColumn, getColumnsByProjectId, removeColumn } from "./column.js";
 import { getProjects, addProject, getProject } from "./project.js";
 import { addTask, getTasks } from "./task.js";
 
@@ -129,6 +129,9 @@ function createColumn(column) {
     const columnHeader = document.createElement("h2");
     columnHeader.textContent = column.title;
 
+    const columnActionsDiv = document.createElement("div");
+    columnActionsDiv.classList.add("column-actions");
+
     const newTaskBtn = document.createElement("button");
     newTaskBtn.textContent = "+ New task";
     newTaskBtn.addEventListener("click", () => {
@@ -140,12 +143,24 @@ function createColumn(column) {
         renderTasks(tasksDiv, column.id);
     });
 
+    const removeColumnBtn = document.createElement("button");
+    removeColumnBtn.id = "remove-column-button";
+    removeColumnBtn.textContent = "Remove column"
+
+    removeColumnBtn.addEventListener("click", () => {
+        // column is being deleted, but tasks still alive in the local storage
+        removeColumn(column.id);
+        setupKanban(column.projectId);
+    });
+
     const tasksDiv = document.createElement("div");
     tasksDiv.classList.add("tasks");
 
     columnDiv.appendChild(columnHeader);
     columnDiv.appendChild(tasksDiv);
-    columnDiv.appendChild(newTaskBtn);
+    columnActionsDiv.appendChild(newTaskBtn);
+    columnActionsDiv.appendChild(removeColumnBtn);
+    columnDiv.appendChild(columnActionsDiv);
 
     renderTasks(tasksDiv, column.id);
 

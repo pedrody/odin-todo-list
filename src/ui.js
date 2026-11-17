@@ -1,5 +1,6 @@
+import trashIcon from "./trash.svg";
 import { addColumn, getColumnsByProjectId, removeColumn } from "./column.js";
-import { getProjects, addProject, getProject } from "./project.js";
+import { getProjects, addProject, getProject, removeProject } from "./project.js";
 import { addTask, getTasks, updateTask } from "./task.js";
 
 export function renderProjects() {
@@ -84,14 +85,41 @@ function createNewProjectForm() {
     return newProjectForm;
 }
 
+function renderHomepage() {
+    const contentHeader = document.getElementById("content-header");
+    contentHeader.textContent = "";
+
+    const kanbanDiv = document.getElementById("kanban");
+    kanbanDiv.textContent = "";
+
+    const contentHeading = document.createElement("h1");
+
+    contentHeading.textContent = "Odin Todo List";
+    contentHeader.appendChild(contentHeading);
+}
+
 function setupContentHeader(projectId) {
     const project = getProject(projectId);
 
     const contentHeader = document.getElementById("content-header");
     contentHeader.textContent = "";
 
+    const projectInfoDiv = document.createElement("div");
+    projectInfoDiv.classList.add("project-info");
+
     const heading = document.createElement("h1");
     heading.textContent = project.title;
+
+    const trashImg = document.createElement("img");
+    trashImg.classList.add("project-action-btn");
+    trashImg.src = trashIcon;
+    trashImg.dataset.projectId = projectId;
+
+    trashImg.addEventListener("click", () => {
+        removeProject(projectId);
+        renderProjects();
+        renderHomepage();
+    });
 
     const newColumnBtn = document.createElement("button");
     newColumnBtn.textContent = "+ New column";
@@ -107,7 +135,9 @@ function setupContentHeader(projectId) {
     });
 
 
-    contentHeader.appendChild(heading);
+    projectInfoDiv.appendChild(heading);
+    projectInfoDiv.appendChild(trashImg);
+    contentHeader.appendChild(projectInfoDiv);
     contentHeader.appendChild(newColumnBtn);
 }
 

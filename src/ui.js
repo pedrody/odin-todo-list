@@ -1,6 +1,6 @@
 import { addColumn, getColumnsByProjectId, removeColumn } from "./column.js";
 import { getProjects, addProject, getProject } from "./project.js";
-import { addTask, getTasks } from "./task.js";
+import { addTask, getTasks, updateTask } from "./task.js";
 
 export function renderProjects() {
     const projectsDiv = document.getElementById("projects");
@@ -187,9 +187,40 @@ function createTaskCard(task) {
     const description = document.createElement("p");
     description.textContent = task.description;
 
-    taskCard.appendChild(title);
-    taskCard.appendChild(description);
+    const toggleDoneInput = createToggleDoneInput(task, taskCard);
+
+    const taskContent = document.createElement("div");
+
+    if (task.done) {
+        taskCard.classList.add("completed-task-card");
+        toggleDoneInput.checked = true;
+    }
+
+    taskCard.appendChild(toggleDoneInput);
+
+    taskContent.appendChild(title);
+    taskContent.appendChild(description);
+
+    taskCard.appendChild(taskContent);
 
     return taskCard;
 }
 
+function createToggleDoneInput(task, taskCard) {
+    const toggleDoneBtn = document.createElement("input");
+    toggleDoneBtn.type = "checkbox";
+
+    toggleDoneBtn.addEventListener("click", () => {
+        task.toggleDone();
+
+        if (task.done) {
+            taskCard.classList.add("completed-task-card");
+        } else {
+            taskCard.classList.remove("completed-task-card");
+        }
+
+        updateTask(task);
+    });
+
+    return toggleDoneBtn;
+}

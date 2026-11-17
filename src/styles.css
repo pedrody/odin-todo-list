@@ -115,6 +115,8 @@ body {
 }
 
 .task-card {
+    display: flex;
+    gap: 8px;
     border: 1px solid #d1d1d1;
     border-radius: 8px;
     padding: 10px;
@@ -124,6 +126,10 @@ body {
     color: #191919;
 }
 
+.task-card input[type="checkbox"] {
+    align-self: flex-start;
+}
+
 .task-card h3,
 .task-card p {
     font-size: 12px;
@@ -131,6 +137,11 @@ body {
 
 .task-card p {
     color: #3c4043;
+}
+
+.completed-task-card {
+    border: 1px solid rgb(0, 200, 0);
+    text-decoration: line-through;
 }
 
 .sidebar-user {

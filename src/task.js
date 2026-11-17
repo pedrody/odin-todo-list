@@ -45,6 +45,16 @@ export function addTask(title, description, columnId) {
     StorageController.add(KEY, tasks);
 }
 
+export function updateTask(taskToUpdate) {
+    const tasks = getTasks();
+
+    const updatedTasks = tasks.map((task) =>
+        task.id === taskToUpdate.id ? taskToUpdate : task
+    );
+
+    StorageController.add(KEY, updatedTasks);
+}
+
 export function removeTasksByColumnId(columnId) {
     const tasks = getTasks();
     const filteredTasks = tasks.filter((task) => task.columnId !== columnId);

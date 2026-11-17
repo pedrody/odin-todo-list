@@ -1,3 +1,4 @@
+import { getColumnsByProjectId, removeColumn } from "./column.js";
 import { StorageController } from "./storage.js";
 
 const KEY = "projects";
@@ -24,6 +25,11 @@ export function addProject(title) {
 }
 
 export function removeProject(id) {
+    const columns = getColumnsByProjectId(id);
+    columns.forEach(col => {
+        removeColumn(col.id);
+    });
+
     StorageController.remove(KEY, id, Project.fromJSON);
 }
 

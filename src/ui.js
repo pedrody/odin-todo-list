@@ -144,11 +144,9 @@ function createColumn(column) {
     });
 
     const removeColumnBtn = document.createElement("button");
-    removeColumnBtn.id = "remove-column-button";
     removeColumnBtn.textContent = "Remove column"
 
     removeColumnBtn.addEventListener("click", () => {
-        // column is being deleted, but tasks still alive in the local storage
         removeColumn(column.id);
         setupKanban(column.projectId);
     });

@@ -6,6 +6,7 @@
 
 body {
     display: flex;
+    height: 100vh;
 }
 
 .sidebar,
@@ -14,17 +15,22 @@ body {
 }
 
 .sidebar {
+    color: #191919;
     display: flex;
     flex-direction: column;
     gap: 20px;
     background-color: #fcfaf8;
     padding: 8px;
+    width: 200px;
+    flex-shrink: 0;
 }
 
 .content {
     flex: 1;
     display: flex;
     flex-direction: column;
+    min-width: 0;
+    padding: 16px;
 }
 
 #projects {
@@ -38,16 +44,14 @@ body {
     text-align: left;
 }
 
-#projects button,
-.sidebar-actions button {
+#projects button {
     background-color: transparent;
     border: none;
     padding: 8px;
-    font-size: 1.2rem;
+    font-size: 16px;
 }
 
-#projects button:hover,
-.sidebar-actions button:hover {
+#projects button:hover {
     cursor: pointer;
     background-color: #ffffff;
 }
@@ -60,19 +64,73 @@ body {
 
 #new-project-form input {
     padding: 4px;
-    font-size: 1.2rem;
+    margin-bottom: 8px;
+    font-size: 14 px;
 }
 
 #kanban {
     flex: 1;
     display: flex;
-    gap: 60px;
+    gap: 40px;
+    overflow-x: auto;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    width: 200px;
+    padding: 20px 0;
+    color: #191919;
+}
+
+.column-actions button {
+    color: #191919;
+    background-color: #f2f2f2;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    padding: 6px 12px;
+}
+
+.column-actions button:hover {
+    cursor: pointer;
+    background-color: #e3e3e3;
+}
+
+.column h2 {
+    font-size: 16px;
+    margin-bottom: 8px;
 }
 
 .column-actions {
     display: flex;
     flex-direction: column;
     gap: 8px;
+    position: sticky;
+}
+
+.tasks {
+    overflow-y: auto;
+}
+
+.task-card {
+    border: 1px solid #d1d1d1;
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 0.8rem;
+    overflow-y: hidden;
+    margin-bottom: 10px;
+    color: #191919;
+}
+
+.task-card h3,
+.task-card p {
+    font-size: 12px;
+}
+
+.task-card p {
+    color: #3c4043;
 }
 
 .sidebar-user {
@@ -83,7 +141,7 @@ body {
 }
 
 .sidebar-user h1 {
-    font-size: 22px;
+    font-size: 20px;
     font-weight: normal;
 }
 
@@ -102,8 +160,28 @@ body {
 #content-header {
     display: flex;
     justify-content: space-between;
+    color: #191919;
 }
 
-#content-header h1 {
-    font-size: 3.4rem;
+#content-header button,
+.sidebar-actions button,
+#new-project-form button {
+    background-color: #191919;
+    border: none;
+    color: #ffffff;
+    border-radius: 8px;
+    padding: 8px 18px;
+}
+
+#content-header button:hover,
+.sidebar-actions button:hover,
+#new-project-form button:hover {
+    background-color: #3c3c3c;
+    cursor: pointer;
+}
+
+#new-project-form button {
+    padding: 4px 20px;
+    font-size: 14px;
+    margin-right: 8px;
 }

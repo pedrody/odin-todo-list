@@ -150,6 +150,52 @@ function renderHomepage() {
     contentHeader.appendChild(contentHeading);
 }
 
+function createNewColumnForm(projectId) {
+    const form = document.createElement("form");
+    form.id = "new-column-form";
+
+    const titleInput = document.createElement("input");
+    titleInput.id = "new-column-input";
+    titleInput.name = "new-column-input";
+    titleInput.placeholder = "Column title...";
+    titleInput.required = true;
+
+    const formActions = document.createElement("div");
+
+    const submitBtn = document.createElement("button");
+    submitBtn.type = "submit";
+    submitBtn.textContent = "Create";
+
+    const cancelBtn = document.createElement("button");
+    cancelBtn.type = "reset";
+    cancelBtn.textContent = "Cancel";
+
+    form.addEventListener("submit", (event) => {
+        event.preventDefault();
+
+        const formData = new FormData(form);
+        const title = formData.get("new-column-input");
+
+        if (!title) {
+            return;
+        }
+
+        addColumn(title, projectId);
+        setupKanban(projectId);
+    });
+
+    form.addEventListener("reset", () => {
+        form.remove();
+    });
+
+    formActions.appendChild(submitBtn);
+    formActions.appendChild(cancelBtn);
+    form.appendChild(titleInput);
+    form.appendChild(formActions);
+
+    return form;
+}
+
 function setupContentHeader(projectId) {
     const project = getProject(projectId);
 

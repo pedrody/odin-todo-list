@@ -38,3 +38,11 @@ export function getProject(id) {
 
     return projects.find((p) => p.id === id);
 }
+
+export function updateProject(id, newProject) {
+    const projects = getProjects();
+
+    const projectsUpdated = projects.map((project) => project.id === id ? newProject : project);
+
+    StorageController.add(KEY, projectsUpdated);
+}

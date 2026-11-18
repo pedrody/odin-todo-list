@@ -1,6 +1,7 @@
 import trashIcon from "./trash.svg";
+import pencilIcon from "./pencil.svg";
 import { addColumn, getColumnsByProjectId, removeColumn } from "./column.js";
-import { getProjects, addProject, getProject, removeProject } from "./project.js";
+import { getProjects, addProject, getProject, removeProject, updateProject } from "./project.js";
 import { addTask, getTasks, updateTask } from "./task.js";
 
 export function renderProjects() {
@@ -85,6 +86,57 @@ function createNewProjectForm() {
     return newProjectForm;
 }
 
+function createEditProjectForm(project) {
+    const editProjectForm = document.createElement("form");
+    editProjectForm.id = "edit-project-form";
+
+    const newProjectTitleInput = document.createElement("input");
+    newProjectTitleInput.id = "new-project-title";
+    newProjectTitleInput.name = "new-project-title";
+    newProjectTitleInput.placeholder = "New project title...";
+    newProjectTitleInput.value = project.title;
+    newProjectTitleInput.required = true;
+
+    const formActions = document.createElement("div");
+
+    const submitBtn = document.createElement("button");
+    submitBtn.type = "submit";
+    submitBtn.textContent = "Confirm";
+
+    const cancelBtn = document.createElement("button");
+    cancelBtn.type = "reset";
+    cancelBtn.textContent = "Cancel";
+
+    editProjectForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+
+        const formData = new FormData(editProjectForm);
+        const newProjectTitle = formData.get("new-project-title").trim();
+
+        if (!newProjectTitle) {
+            return;
+        }
+
+        project.title = newProjectTitle;
+        updateProject(project.id, project);
+
+        editProjectForm.reset();
+        renderProjects();
+        setupContentHeader(project.id);
+    });
+
+    editProjectForm.addEventListener("reset", () => {
+        setupContentHeader(project.id);
+    });
+
+    formActions.appendChild(submitBtn);
+    formActions.appendChild(cancelBtn);
+    editProjectForm.appendChild(newProjectTitleInput);
+    editProjectForm.appendChild(formActions);
+
+    return editProjectForm;
+}
+
 function renderHomepage() {
     const contentHeader = document.getElementById("content-header");
     contentHeader.textContent = "";
@@ -110,6 +162,11 @@ function setupContentHeader(projectId) {
     const heading = document.createElement("h1");
     heading.textContent = project.title;
 
+    const pencilImg = document.createElement("img");
+    pencilImg.classList.add("project-action-btn");
+    pencilImg.src = pencilIcon;
+    pencilImg.dataset.projectId = projectId;
+
     const trashImg = document.createElement("img");
     trashImg.classList.add("project-action-btn");
     trashImg.src = trashIcon;
@@ -134,8 +191,18 @@ function setupContentHeader(projectId) {
         setupKanban(projectId);
     });
 
+    pencilImg.addEventListener("click", () => {
+        heading.remove();
+        pencilImg.remove();
+        trashImg.remove();
+
+        const form = createEditProjectForm(getProject(projectId));
+        projectInfoDiv.appendChild(form);
+        form.querySelector("input").focus();
+    });
 
     projectInfoDiv.appendChild(heading);
+    projectInfoDiv.appendChild(pencilImg);
     projectInfoDiv.appendChild(trashImg);
     contentHeader.appendChild(projectInfoDiv);
     contentHeader.appendChild(newColumnBtn);

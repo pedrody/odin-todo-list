@@ -62,10 +62,10 @@ body {
     align-items: center;
 }
 
-#new-project-form input {
+#new-project-form input,
+#edit-project-form input {
     padding: 4px;
     margin-bottom: 8px;
-    font-size: 14 px;
 }
 
 #kanban {
@@ -208,8 +208,14 @@ body {
     cursor: pointer;
 }
 
-#new-project-form button {
+#new-project-form button,
+#edit-project-form button {
     padding: 4px 20px;
     font-size: 14px;
     margin-right: 8px;
+}
+
+#edit-project-form {
+    display: flex;
+    gap: 8px;
 }

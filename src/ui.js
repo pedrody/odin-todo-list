@@ -229,12 +229,12 @@ function setupContentHeader(projectId) {
     newColumnBtn.dataset.projectId = project.id;
 
     newColumnBtn.addEventListener("click", () => {
-        // prompt is temporary, remove later
-        const columnName = prompt("Column name:");
+        const kanbanDiv = document.getElementById("kanban");
+        const form = createNewColumnForm(projectId);
+        const input = form.querySelector("input");
 
-        addColumn(columnName, project.id);
-
-        setupKanban(projectId);
+        kanbanDiv.appendChild(form);
+        input.focus();
     });
 
     pencilImg.addEventListener("click", () => {

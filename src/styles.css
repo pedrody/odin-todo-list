@@ -57,14 +57,16 @@ body {
     background-color: #ffffff;
 }
 
-#new-project-form {
+#new-project-form,
+#new-column-form {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
 #new-project-form input,
-#edit-project-form input {
+#edit-project-form input,
+#new-column-form input {
     padding: 4px;
     margin-bottom: 8px;
 }
@@ -194,7 +196,8 @@ body {
 
 #content-header button,
 .sidebar-actions button,
-#new-project-form button {
+#new-project-form button,
+#new-column-form button {
     background-color: #191919;
     border: none;
     color: #ffffff;
@@ -204,13 +207,15 @@ body {
 
 #content-header button:hover,
 .sidebar-actions button:hover,
-#new-project-form button:hover {
+#new-project-form button:hover,
+#new-column-form button:hover {
     background-color: #3c3c3c;
     cursor: pointer;
 }
 
 #new-project-form button,
-#edit-project-form button {
+#edit-project-form button,
+#new-column-form button {
     padding: 4px 20px;
     font-size: 14px;
     margin-right: 8px;
@@ -219,4 +224,8 @@ body {
 #edit-project-form {
     display: flex;
     gap: 8px;
+}
+
+#new-column-form {
+    padding: 20px 0;
 }

@@ -69,7 +69,8 @@ body {
 #edit-project-form input,
 #new-column-form input,
 #new-task-form input,
-#new-task-form textarea {
+#new-task-form textarea,
+#update-column-form input {
     padding: 4px;
     margin-bottom: 8px;
 }
@@ -201,7 +202,8 @@ body {
 .sidebar-actions button,
 #new-project-form button,
 #new-column-form button,
-#new-task-form button {
+#new-task-form button,
+#update-column-form button {
     background-color: #191919;
     border: none;
     color: #ffffff;
@@ -213,7 +215,8 @@ body {
 .sidebar-actions button:hover,
 #new-project-form button:hover,
 #new-column-form button:hover,
-#new-task-form button:hover {
+#new-task-form button:hover,
+#update-column-form button:hover {
     background-color: #3c3c3c;
     cursor: pointer;
 }
@@ -221,7 +224,8 @@ body {
 #new-project-form button,
 #edit-project-form button,
 #new-column-form button,
-#new-task-form button {
+#new-task-form button,
+#update-column-form button {
     padding: 4px 20px;
     font-size: 14px;
     margin-right: 8px;
@@ -241,10 +245,32 @@ body {
 }
 
 #new-task-form input,
-#new-task-form textarea {
+#new-task-form textarea,
+#update-column-form input {
     width: 100%;
 }
 
 #new-task-form textarea {
     resize: none;
+}
+
+#update-column-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 20px
+}
+
+.column-info:not([hidden]) {
+    display: flex;
+    gap: 8px;
+}
+
+.column-info button {
+    border: none;
+    background-color: transparent;
+}
+
+.column-info button:hover {
+    cursor: pointer;
 }

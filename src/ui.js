@@ -395,10 +395,12 @@ function createColumn(column) {
 
 function createUpdateColumnForm(column, columnInfoDiv) {
     const form = document.createElement("form");
+    form.id = "update-column-form";
     const input = document.createElement("input");
     input.id = "title";
     input.name = "title";
     input.required = true;
+    input.placeholder = "New title..."
 
     const formActionsDiv = document.createElement("div");
 

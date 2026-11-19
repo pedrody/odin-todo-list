@@ -15,6 +15,12 @@ export class Column {
     }
 }
 
+export function getColumn(id) {
+    const columns = getColumns();
+
+    return columns.find((c) => c.id === id);
+}
+
 export function getColumns() {
     return StorageController.get(KEY, Column.fromJSON);
 }

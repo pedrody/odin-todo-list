@@ -1,6 +1,6 @@
 import trashIcon from "./trash.svg";
 import pencilIcon from "./pencil.svg";
-import { addColumn, getColumnsByProjectId, removeColumn } from "./column.js";
+import { addColumn, getColumnsByProjectId, removeColumn, updateColumn } from "./column.js";
 import { getProjects, addProject, getProject, removeProject, updateProject } from "./project.js";
 import { addTask, getTasks, updateTask } from "./task.js";
 
@@ -327,8 +327,17 @@ function createColumn(column) {
     const columnDiv = document.createElement("div");
     columnDiv.classList.add("column");
 
+    const columnInfo = document.createElement("div");
+    columnInfo.classList.add("column-info");
+
     const columnHeader = document.createElement("h2");
     columnHeader.textContent = column.title;
+
+    const editBtn = document.createElement("button");
+    const editImg = document.createElement("img");
+    editImg.src = pencilIcon;
+    editBtn.hidden = true;
+    editBtn.appendChild(editImg);
 
     const columnActionsDiv = document.createElement("div");
     columnActionsDiv.classList.add("column-actions");
@@ -352,10 +361,32 @@ function createColumn(column) {
         setupKanban(column.projectId);
     });
 
+    columnInfo.addEventListener("mouseover", () => {
+        editBtn.hidden = false;
+    });
+
+    columnInfo.addEventListener("mouseout", () => {
+        editBtn.hidden = true;
+    });
+
+    editBtn.addEventListener("click", () => {
+        const title = window.prompt("Column title:");
+
+        if (!title) {
+            return;
+        }
+
+        column.title = title;
+        updateColumn(column.id, column);
+        setupKanban(column.projectId);
+    });
+
     const tasksDiv = document.createElement("div");
     tasksDiv.classList.add("tasks");
 
-    columnDiv.appendChild(columnHeader);
+    columnInfo.appendChild(columnHeader);
+    columnInfo.appendChild(editBtn);
+    columnDiv.appendChild(columnInfo);
     columnDiv.appendChild(tasksDiv);
     columnActionsDiv.appendChild(newTaskBtn);
     columnActionsDiv.appendChild(removeColumnBtn);

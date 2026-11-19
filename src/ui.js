@@ -196,6 +196,64 @@ function createNewColumnForm(projectId) {
     return form;
 }
 
+function createNewTaskForm(tasksDiv, columnId, newTaskBtn, removeColumnBtn) {
+    const form = document.createElement("form");
+    form.id = "new-task-form";
+
+    const titleInput = document.createElement("input");
+    titleInput.id = "task-title";
+    titleInput.name = "task-title";
+    titleInput.placeholder = "Title...";
+    titleInput.required = true;
+
+    const descriptionInput = document.createElement("textarea");
+    descriptionInput.rows = 4;
+    descriptionInput.id = "task-description";
+    descriptionInput.name = "task-description";
+    descriptionInput.placeholder = "Description...";
+
+    const formActions = document.createElement("div");
+
+    const createBtn = document.createElement("button");
+    createBtn.type = "submit";
+    createBtn.textContent = "Create";
+
+    const cancelBtn = document.createElement("button");
+    cancelBtn.type = "reset";
+    cancelBtn.textContent = "Cancel";
+
+    form.addEventListener("submit", (event) => {
+        event.preventDefault();
+
+        const formData = new FormData(form);
+        const title = formData.get("task-title");
+        const description = formData.get("task-description");
+
+        if (!title) {
+            return;
+        }
+
+        addTask(title, description, columnId);
+        renderTasks(tasksDiv, columnId);
+        form.reset();
+    });
+
+    form.addEventListener("reset", () => {
+        form.remove();
+
+        newTaskBtn.hidden = false;
+        removeColumnBtn.hidden = false;
+    });
+
+    form.appendChild(titleInput);
+    form.appendChild(descriptionInput);
+    formActions.appendChild(createBtn);
+    formActions.appendChild(cancelBtn);
+    form.appendChild(formActions);
+
+    return form;
+}
+
 function setupContentHeader(projectId) {
     const project = getProject(projectId);
 

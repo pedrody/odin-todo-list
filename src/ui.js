@@ -341,6 +341,7 @@ function createColumn(column) {
 
         const form = createNewTaskForm(tasksDiv, column.id, newTaskBtn, removeColumnBtn);
         tasksDiv.insertBefore(form, tasksDiv.firstChild);
+        form.querySelector("#task-title").focus();
     });
 
     const removeColumnBtn = document.createElement("button");

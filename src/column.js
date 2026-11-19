@@ -37,7 +37,12 @@ export function removeColumn(columnId) {
     removeTasksByColumnId(columnId);
 }
 
+export function updateColumn(id, column) {
+    const columns = getColumns();
+    const columnsUpdated = columns.map((c) => c.id === id ? column : c);
 
+    StorageController.add(KEY, columnsUpdated);
+}
 
 
 

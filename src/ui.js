@@ -370,15 +370,11 @@ function createColumn(column) {
     });
 
     editBtn.addEventListener("click", () => {
-        const title = window.prompt("Column title:");
+        columnInfo.hidden = true;
 
-        if (!title) {
-            return;
-        }
-
-        column.title = title;
-        updateColumn(column.id, column);
-        setupKanban(column.projectId);
+        const form = createUpdateColumnForm(column, columnInfo);
+        columnDiv.insertBefore(form, columnDiv.firstChild);
+        form.querySelector("input").focus();
     });
 
     const tasksDiv = document.createElement("div");
@@ -395,6 +391,52 @@ function createColumn(column) {
     renderTasks(tasksDiv, column.id);
 
     return columnDiv;
+}
+
+function createUpdateColumnForm(column, columnInfoDiv) {
+    const form = document.createElement("form");
+    const input = document.createElement("input");
+    input.id = "title";
+    input.name = "title";
+    input.required = true;
+
+    const formActionsDiv = document.createElement("div");
+
+    const confirmBtn = document.createElement("button");
+    confirmBtn.type = "submit";
+    confirmBtn.textContent = "Confirm";
+    const cancelBtn = document.createElement("button");
+    cancelBtn.type = "reset";
+    cancelBtn.textContent = "Cancel";
+
+    form.addEventListener("submit", (event) => {
+        event.preventDefault();
+
+        const formData = new FormData(form);
+        const title = formData.get("title").trim();
+
+        if (!title) {
+            return;
+        }
+
+        column.title = title;
+        updateColumn(column.id, column);
+        setupKanban(column.projectId);
+
+        form.reset();
+    });
+
+    form.addEventListener("reset", () => {
+        form.remove();
+        columnInfoDiv.hidden = false;
+    });
+
+    formActionsDiv.appendChild(confirmBtn);
+    formActionsDiv.appendChild(cancelBtn);
+    form.appendChild(input);
+    form.appendChild(formActionsDiv);
+
+    return form;
 }
 
 function renderTasks(tasksDiv, columnId) {

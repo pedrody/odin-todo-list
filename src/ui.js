@@ -1,6 +1,6 @@
 import trashIcon from "./trash.svg";
 import pencilIcon from "./pencil.svg";
-import { addColumn, getColumnsByProjectId, removeColumn } from "./column.js";
+import { addColumn, getColumnsByProjectId, removeColumn, updateColumn } from "./column.js";
 import { getProjects, addProject, getProject, removeProject, updateProject } from "./project.js";
 import { addTask, getTasks, updateTask } from "./task.js";
 
@@ -327,8 +327,17 @@ function createColumn(column) {
     const columnDiv = document.createElement("div");
     columnDiv.classList.add("column");
 
+    const columnInfo = document.createElement("div");
+    columnInfo.classList.add("column-info");
+
     const columnHeader = document.createElement("h2");
     columnHeader.textContent = column.title;
+
+    const editBtn = document.createElement("button");
+    const editImg = document.createElement("img");
+    editImg.src = pencilIcon;
+    editBtn.hidden = true;
+    editBtn.appendChild(editImg);
 
     const columnActionsDiv = document.createElement("div");
     columnActionsDiv.classList.add("column-actions");
@@ -352,10 +361,28 @@ function createColumn(column) {
         setupKanban(column.projectId);
     });
 
+    columnInfo.addEventListener("mouseover", () => {
+        editBtn.hidden = false;
+    });
+
+    columnInfo.addEventListener("mouseout", () => {
+        editBtn.hidden = true;
+    });
+
+    editBtn.addEventListener("click", () => {
+        columnInfo.hidden = true;
+
+        const form = createUpdateColumnForm(column, columnInfo);
+        columnDiv.insertBefore(form, columnDiv.firstChild);
+        form.querySelector("input").focus();
+    });
+
     const tasksDiv = document.createElement("div");
     tasksDiv.classList.add("tasks");
 
-    columnDiv.appendChild(columnHeader);
+    columnInfo.appendChild(columnHeader);
+    columnInfo.appendChild(editBtn);
+    columnDiv.appendChild(columnInfo);
     columnDiv.appendChild(tasksDiv);
     columnActionsDiv.appendChild(newTaskBtn);
     columnActionsDiv.appendChild(removeColumnBtn);
@@ -364,6 +391,54 @@ function createColumn(column) {
     renderTasks(tasksDiv, column.id);
 
     return columnDiv;
+}
+
+function createUpdateColumnForm(column, columnInfoDiv) {
+    const form = document.createElement("form");
+    form.id = "update-column-form";
+    const input = document.createElement("input");
+    input.id = "title";
+    input.name = "title";
+    input.required = true;
+    input.placeholder = "New title..."
+
+    const formActionsDiv = document.createElement("div");
+
+    const confirmBtn = document.createElement("button");
+    confirmBtn.type = "submit";
+    confirmBtn.textContent = "Confirm";
+    const cancelBtn = document.createElement("button");
+    cancelBtn.type = "reset";
+    cancelBtn.textContent = "Cancel";
+
+    form.addEventListener("submit", (event) => {
+        event.preventDefault();
+
+        const formData = new FormData(form);
+        const title = formData.get("title").trim();
+
+        if (!title) {
+            return;
+        }
+
+        column.title = title;
+        updateColumn(column.id, column);
+        setupKanban(column.projectId);
+
+        form.reset();
+    });
+
+    form.addEventListener("reset", () => {
+        form.remove();
+        columnInfoDiv.hidden = false;
+    });
+
+    formActionsDiv.appendChild(confirmBtn);
+    formActionsDiv.appendChild(cancelBtn);
+    form.appendChild(input);
+    form.appendChild(formActionsDiv);
+
+    return form;
 }
 
 function renderTasks(tasksDiv, columnId) {

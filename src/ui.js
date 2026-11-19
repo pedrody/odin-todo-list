@@ -336,12 +336,11 @@ function createColumn(column) {
     const newTaskBtn = document.createElement("button");
     newTaskBtn.textContent = "+ New task";
     newTaskBtn.addEventListener("click", () => {
-        // prompt is temporary, remove later
-        const title = prompt("Task title:");
-        const description = prompt("Task description:");
+        newTaskBtn.hidden = true;
+        removeColumnBtn.hidden = true;
 
-        addTask(title, description, column.id);
-        renderTasks(tasksDiv, column.id);
+        const form = createNewTaskForm(tasksDiv, column.id, newTaskBtn, removeColumnBtn);
+        tasksDiv.insertBefore(form, tasksDiv.firstChild);
     });
 
     const removeColumnBtn = document.createElement("button");

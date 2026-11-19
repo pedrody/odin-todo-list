@@ -58,7 +58,8 @@ body {
 }
 
 #new-project-form,
-#new-column-form {
+#new-column-form,
+#new-task-form {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -66,7 +67,9 @@ body {
 
 #new-project-form input,
 #edit-project-form input,
-#new-column-form input {
+#new-column-form input,
+#new-task-form input,
+#new-task-form textarea {
     padding: 4px;
     margin-bottom: 8px;
 }
@@ -197,7 +200,8 @@ body {
 #content-header button,
 .sidebar-actions button,
 #new-project-form button,
-#new-column-form button {
+#new-column-form button,
+#new-task-form button {
     background-color: #191919;
     border: none;
     color: #ffffff;
@@ -208,14 +212,16 @@ body {
 #content-header button:hover,
 .sidebar-actions button:hover,
 #new-project-form button:hover,
-#new-column-form button:hover {
+#new-column-form button:hover,
+#new-task-form button:hover {
     background-color: #3c3c3c;
     cursor: pointer;
 }
 
 #new-project-form button,
 #edit-project-form button,
-#new-column-form button {
+#new-column-form button,
+#new-task-form button {
     padding: 4px 20px;
     font-size: 14px;
     margin-right: 8px;
@@ -228,4 +234,17 @@ body {
 
 #new-column-form {
     padding: 20px 0;
+}
+
+#new-task-form {
+    margin-bottom: 16px;
+}
+
+#new-task-form input,
+#new-task-form textarea {
+    width: 100%;
+}
+
+#new-task-form textarea {
+    resize: none;
 }

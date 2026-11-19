@@ -35,6 +35,12 @@ export class Task {
     }
 }
 
+export function getTask(id) {
+    const tasks = getTasks();
+
+    return tasks.find((t) => t.id === id);
+}
+
 export function getTasks() {
     return StorageController.get(KEY, Task.fromJSON);
 }

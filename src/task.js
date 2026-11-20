@@ -66,3 +66,9 @@ export function removeTasksByColumnId(columnId) {
     const filteredTasks = tasks.filter((task) => task.columnId !== columnId);
     StorageController.add(KEY, filteredTasks);
 }
+
+export function removeTask(id) {
+    const tasks = getTasks().filter((t) => t.id !== id);
+
+    StorageController.add(KEY, tasks);
+}

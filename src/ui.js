@@ -2,7 +2,7 @@ import trashIcon from "./trash.svg";
 import pencilIcon from "./pencil.svg";
 import { addColumn, getColumnsByProjectId, removeColumn, updateColumn } from "./column.js";
 import { getProjects, addProject, getProject, removeProject, updateProject, getProjectByTaskId } from "./project.js";
-import { addTask, getTasks, updateTask } from "./task.js";
+import { addTask, getTasks, removeTask, updateTask } from "./task.js";
 
 export function renderProjects() {
     const projectsDiv = document.getElementById("projects");
@@ -494,6 +494,13 @@ function openTaskModal(task) {
     closeBtn.classList.add("close-modal-btn");
     closeBtn.setAttribute("aria-label", "Close window");
 
+    const deleteBtn = document.createElement("button");
+    deleteBtn.type = "button";
+    const deleteIcon = document.createElement("img");
+    deleteIcon.src = trashIcon;
+    deleteBtn.classList.add("delete-btn");
+    deleteBtn.appendChild(deleteIcon);
+
     closeBtn.addEventListener("click", () => {
         dialog.close();
     });
@@ -528,11 +535,18 @@ function openTaskModal(task) {
         setupKanban(project.id);
     });
 
+    deleteBtn.addEventListener("click", () => {
+        const project = getProjectByTaskId(task.id);
+        removeTask(task.id);
+        dialog.close();
+        setupKanban(project.id);
+    });
+
     const titleGroup = createInputGroup(titleLabel, title);
     const descriptionGroup = createInputGroup(descriptionLabel, description);
     const ActionsGroup = document.createElement("div");
     ActionsGroup.classList.add("actions-group");
-    ActionsGroup.append(editBtn, saveBtn);
+    ActionsGroup.append(deleteBtn, editBtn, saveBtn);
 
     form.append(titleGroup, descriptionGroup, ActionsGroup);
     dialog.appendChild(form);

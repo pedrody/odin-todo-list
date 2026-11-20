@@ -479,6 +479,33 @@ function openTaskModal(task) {
     descriptionLabel.textContent = "Description:";
     descriptionLabel.htmlFor = description.id;
 
+    // select com options
+    // options terão value de acordo com a prioridade
+    // ex.: <option value="0">Low</option>
+    // converter para inteiro antes de adicionar no objeto
+    const priority = document.createElement("select");
+    priority.id = "task-priority";
+    priority.name = "task-priority";
+    priority.disabled = true;
+    // como vou setar o value para o valor que está na task?
+    // ex.: priority.value = task.priority (0, 1, 2) isso funciona?
+
+    const lowPriority = document.createElement("option");
+    lowPriority.textContent = "Low";
+    lowPriority.value = 0;
+
+    const mediumPriority = document.createElement("option");
+    mediumPriority.textContent = "Medium";
+    mediumPriority.value = 1;
+
+    const highPriority = document.createElement("option");
+    highPriority.textContent = "High";
+    highPriority.value = 2;
+
+    const priorityLabel = document.createElement("label");
+    priorityLabel.textContent = "Priority:";
+    priorityLabel.htmlFor = priority.id;
+
     const dueDate = document.createElement("input");
     dueDate.type = "date";
     dueDate.id = "task-due-date";
@@ -530,6 +557,7 @@ function openTaskModal(task) {
         description.disabled = false;
         done.disabled = false;
         dueDate.disabled = false;
+        priority.disabled = false;
 
         editBtn.hidden = true;
         saveBtn.hidden = false;
@@ -547,11 +575,13 @@ function openTaskModal(task) {
         task.description = description.value;
         task.done = done.checked;
         task.dueDate = dueDate.value;
+        task.priority = Number(priority.value);
 
         title.disabled = true;
         description.disabled = true;
         done.disabled = true;
         dueDate.disabled = true;
+        priority.disabled = true;
 
         saveBtn.hidden = true;
         editBtn.hidden = false;
@@ -568,9 +598,13 @@ function openTaskModal(task) {
         setupKanban(project.id);
     });
 
+    priority.append(lowPriority, mediumPriority, highPriority);
+    priority.value = task.priority;
+
     const titleGroup = createInputGroup(titleLabel, title);
     const descriptionGroup = createInputGroup(descriptionLabel, description);
     const dueDateGroup = createInputGroup(dueDateLabel, dueDate);
+    const priorityGroup = createInputGroup(priorityLabel, priority);
     const ActionsGroup = document.createElement("div");
     ActionsGroup.classList.add("actions-group");
     ActionsGroup.append(deleteBtn, editBtn, saveBtn);
@@ -579,7 +613,7 @@ function openTaskModal(task) {
     checkboxGroup.classList.add("checkbox-group");
     checkboxGroup.append(doneLabel, done);
 
-    form.append(titleGroup, descriptionGroup, dueDateGroup, checkboxGroup, ActionsGroup);
+    form.append(titleGroup, descriptionGroup, priorityGroup, dueDateGroup, checkboxGroup, ActionsGroup);
     dialog.appendChild(form);
     dialog.appendChild(closeBtn);
     document.body.appendChild(dialog);

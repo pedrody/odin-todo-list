@@ -72,7 +72,8 @@ body {
 #new-task-form textarea,
 #update-column-form input,
 .task-modal input:not([type="checkbox"]),
-.task-modal textarea {
+.task-modal textarea,
+.task-modal select {
     padding: 4px;
     margin-bottom: 8px;
 }

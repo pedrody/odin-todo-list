@@ -70,7 +70,10 @@ body {
 #new-column-form input,
 #new-task-form input,
 #new-task-form textarea,
-#update-column-form input {
+#update-column-form input,
+.task-modal input:not([type="checkbox"]),
+.task-modal textarea,
+.task-modal select {
     padding: 4px;
     margin-bottom: 8px;
 }
@@ -133,6 +136,19 @@ body {
     color: #191919;
 }
 
+.task-card.due-today-tomorrow {
+    border-color: orange;
+}
+
+.task-card.overdue {
+    border-color: red;
+}
+
+.task-card.completed-task-card {
+    border: 1px solid rgb(0, 200, 0);
+    text-decoration: line-through;
+}
+
 .task-card input[type="checkbox"] {
     align-self: flex-start;
 }
@@ -144,11 +160,6 @@ body {
 
 .task-card p {
     color: #3c4043;
-}
-
-.completed-task-card {
-    border: 1px solid rgb(0, 200, 0);
-    text-decoration: line-through;
 }
 
 .sidebar-user {
@@ -193,7 +204,9 @@ body {
 }
 
 
-.project-info img:hover {
+.project-info img:hover,
+.close-modal-btn:hover,
+.delete-btn:hover {
     cursor: pointer;
     opacity: 0.7;
 }
@@ -203,7 +216,8 @@ body {
 #new-project-form button,
 #new-column-form button,
 #new-task-form button,
-#update-column-form button {
+#update-column-form button,
+.task-modal .actions-group button:not(.delete-btn) {
     background-color: #191919;
     border: none;
     color: #ffffff;
@@ -216,7 +230,8 @@ body {
 #new-project-form button:hover,
 #new-column-form button:hover,
 #new-task-form button:hover,
-#update-column-form button:hover {
+#update-column-form button:hover,
+.task-modal .actions-group button:hover:not(.delete-btn) {
     background-color: #3c3c3c;
     cursor: pointer;
 }
@@ -250,7 +265,8 @@ body {
     width: 100%;
 }
 
-#new-task-form textarea {
+#new-task-form textarea,
+.task-modal textarea {
     resize: none;
 }
 
@@ -273,4 +289,53 @@ body {
 
 .column-info button:hover {
     cursor: pointer;
+}
+
+.task-modal {
+    position: relative;
+    width: 400px;
+    margin: auto;
+    border: none;
+    border-radius: 8px;
+    padding: 32px;
+}
+
+.close-modal-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background-color: transparent;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    color: #191919;
+    font-weight: bold;
+}
+
+.task-modal form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.delete-btn {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.actions-group {
+    display: flex;
+    justify-content: space-between;
+}
+
+.checkbox-group {
+    display: flex;
+    gap: 4px;
 }

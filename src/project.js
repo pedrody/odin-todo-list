@@ -1,5 +1,6 @@
-import { getColumnsByProjectId, removeColumn } from "./column.js";
+import { getColumn, getColumnsByProjectId, removeColumn } from "./column.js";
 import { StorageController } from "./storage.js";
+import { getTask } from "./task.js";
 
 const KEY = "projects";
 
@@ -45,4 +46,12 @@ export function updateProject(id, newProject) {
     const projectsUpdated = projects.map((project) => project.id === id ? newProject : project);
 
     StorageController.add(KEY, projectsUpdated);
+}
+
+export function getProjectByTaskId(taskId) {
+    const task = getTask(taskId);
+    const column = getColumn(task.columnId);
+    const project = getProject(column.projectId);
+
+    return project;
 }

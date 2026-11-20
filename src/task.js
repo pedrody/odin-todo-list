@@ -1,4 +1,5 @@
 import { StorageController } from "./storage.js";
+import { parseISO, startOfDay, isBefore, isToday, isTomorrow } from "date-fns";
 
 const KEY = "tasks";
 
@@ -33,6 +34,34 @@ export class Task {
     toggleDone() {
         this.done = !this.done;
     }
+
+    getDueDate() {
+        return this.dueDate ? parseISO(this.dueDate) : null;
+    }
+
+    isOverdue() {
+        const dueDate = this.getDueDate();
+
+        return dueDate !== null && isBefore(dueDate, startOfDay(new Date()));
+    }
+
+    isDueToday() {
+        const dueDate = this.getDueDate();
+
+        return dueDate !== null && isToday(dueDate);
+    }
+
+    isDueTomorrow() {
+        const dueDate = this.getDueDate();
+
+        return dueDate !== null && isTomorrow(dueDate);
+    }
+}
+
+export function getTask(id) {
+    const tasks = getTasks();
+
+    return tasks.find((t) => t.id === id);
 }
 
 export function getTasks() {
@@ -59,4 +88,10 @@ export function removeTasksByColumnId(columnId) {
     const tasks = getTasks();
     const filteredTasks = tasks.filter((task) => task.columnId !== columnId);
     StorageController.add(KEY, filteredTasks);
+}
+
+export function removeTask(id) {
+    const tasks = getTasks().filter((t) => t.id !== id);
+
+    StorageController.add(KEY, tasks);
 }

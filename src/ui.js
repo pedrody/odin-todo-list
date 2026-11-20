@@ -1,8 +1,8 @@
 import trashIcon from "./trash.svg";
 import pencilIcon from "./pencil.svg";
 import { addColumn, getColumnsByProjectId, removeColumn, updateColumn } from "./column.js";
-import { getProjects, addProject, getProject, removeProject, updateProject } from "./project.js";
-import { addTask, getTasks, updateTask } from "./task.js";
+import { getProjects, addProject, getProject, removeProject, updateProject, getProjectByTaskId } from "./project.js";
+import { addTask, getTasks, removeTask, updateTask } from "./task.js";
 
 export function renderProjects() {
     const projectsDiv = document.getElementById("projects");
@@ -451,9 +451,193 @@ function renderTasks(tasksDiv, columnId) {
     });
 }
 
+function openTaskModal(task) {
+    const dialog = document.createElement("dialog");
+    dialog.classList.add("task-modal");
+
+    const form = document.createElement("form");
+
+    const title = document.createElement("input");
+    title.id = "task-title";
+    title.name = "task-title";
+    title.value = task.title;
+    title.disabled = true;
+    title.required = true;
+
+    const titleLabel = document.createElement("label");
+    titleLabel.textContent = "Title:";
+    titleLabel.htmlFor = title.id;
+
+    const description = document.createElement("textarea");
+    description.id = "task-description";
+    description.name = "task-description";
+    description.value = task.description;
+    description.disabled = true;
+    description.rows = 8;
+
+    const descriptionLabel = document.createElement("label");
+    descriptionLabel.textContent = "Description:";
+    descriptionLabel.htmlFor = description.id;
+
+    // select com options
+    // options terão value de acordo com a prioridade
+    // ex.: <option value="0">Low</option>
+    // converter para inteiro antes de adicionar no objeto
+    const priority = document.createElement("select");
+    priority.id = "task-priority";
+    priority.name = "task-priority";
+    priority.disabled = true;
+    // como vou setar o value para o valor que está na task?
+    // ex.: priority.value = task.priority (0, 1, 2) isso funciona?
+
+    const lowPriority = document.createElement("option");
+    lowPriority.textContent = "Low";
+    lowPriority.value = 0;
+
+    const mediumPriority = document.createElement("option");
+    mediumPriority.textContent = "Medium";
+    mediumPriority.value = 1;
+
+    const highPriority = document.createElement("option");
+    highPriority.textContent = "High";
+    highPriority.value = 2;
+
+    const priorityLabel = document.createElement("label");
+    priorityLabel.textContent = "Priority:";
+    priorityLabel.htmlFor = priority.id;
+
+    const dueDate = document.createElement("input");
+    dueDate.type = "date";
+    dueDate.id = "task-due-date";
+    dueDate.name = "task-due-date";
+    dueDate.value = task.dueDate;  // I don't know if this works
+    dueDate.disabled = true;
+    const dueDateLabel = document.createElement("label");
+    dueDateLabel.textContent = "Due date:";
+    dueDateLabel.htmlFor = dueDate.id;
+
+    const done = document.createElement("input");
+    done.type = "checkbox";
+    done.id = "task-done";
+    done.name = "task-done";
+    done.checked = task.done;
+    done.disabled = true;
+    const doneLabel = document.createElement("label");
+    doneLabel.textContent = "Done:";
+    doneLabel.htmlFor = done.id;
+
+    const editBtn = document.createElement("button");
+    editBtn.textContent = "Edit";
+    editBtn.type = "button";
+
+    const saveBtn = document.createElement("button");
+    saveBtn.textContent = "Save";
+    saveBtn.type = "submit";
+    saveBtn.hidden = true;
+
+    const closeBtn = document.createElement("button");
+    closeBtn.textContent = "x";
+    closeBtn.type = "button";
+    closeBtn.classList.add("close-modal-btn");
+    closeBtn.setAttribute("aria-label", "Close window");
+
+    const deleteBtn = document.createElement("button");
+    deleteBtn.type = "button";
+    const deleteIcon = document.createElement("img");
+    deleteIcon.src = trashIcon;
+    deleteBtn.classList.add("delete-btn");
+    deleteBtn.appendChild(deleteIcon);
+
+    closeBtn.addEventListener("click", () => {
+        dialog.close();
+    });
+
+    editBtn.addEventListener("click", () => {
+        title.disabled = false;
+        description.disabled = false;
+        done.disabled = false;
+        dueDate.disabled = false;
+        priority.disabled = false;
+
+        editBtn.hidden = true;
+        saveBtn.hidden = false;
+    });
+
+    form.addEventListener("submit", (event) => {
+        event.preventDefault();
+
+        if (!title.value.trim()) {
+            title.focus();
+            return;
+        }
+
+        task.title = title.value;
+        task.description = description.value;
+        task.done = done.checked;
+        task.dueDate = dueDate.value;
+        task.priority = Number(priority.value);
+
+        title.disabled = true;
+        description.disabled = true;
+        done.disabled = true;
+        dueDate.disabled = true;
+        priority.disabled = true;
+
+        saveBtn.hidden = true;
+        editBtn.hidden = false;
+
+        updateTask(task);
+        const project = getProjectByTaskId(task.id);
+        setupKanban(project.id);
+    });
+
+    deleteBtn.addEventListener("click", () => {
+        const project = getProjectByTaskId(task.id);
+        removeTask(task.id);
+        dialog.close();
+        setupKanban(project.id);
+    });
+
+    priority.append(lowPriority, mediumPriority, highPriority);
+    priority.value = task.priority;
+
+    const titleGroup = createInputGroup(titleLabel, title);
+    const descriptionGroup = createInputGroup(descriptionLabel, description);
+    const dueDateGroup = createInputGroup(dueDateLabel, dueDate);
+    const priorityGroup = createInputGroup(priorityLabel, priority);
+    const ActionsGroup = document.createElement("div");
+    ActionsGroup.classList.add("actions-group");
+    ActionsGroup.append(deleteBtn, editBtn, saveBtn);
+
+    const checkboxGroup = document.createElement("div");
+    checkboxGroup.classList.add("checkbox-group");
+    checkboxGroup.append(doneLabel, done);
+
+    form.append(titleGroup, descriptionGroup, priorityGroup, dueDateGroup, checkboxGroup, ActionsGroup);
+    dialog.appendChild(form);
+    dialog.appendChild(closeBtn);
+    document.body.appendChild(dialog);
+
+    dialog.showModal();
+}
+
+function createInputGroup(label, input) {
+    const group = document.createElement("div");
+    group.classList.add("input-group");
+    group.append(label, input);
+
+    return group;
+}
+
 function createTaskCard(task) {
     const taskCard = document.createElement("div");
     taskCard.classList.add("task-card");
+
+    if (task.isDueToday() || task.isDueTomorrow()) {
+        taskCard.classList.add("due-today-tomorrow");
+    } else if (task.isOverdue()) {
+        taskCard.classList.add("overdue");
+    }
 
     const title = document.createElement("h3");
     title.textContent = task.title;
@@ -469,6 +653,14 @@ function createTaskCard(task) {
         taskCard.classList.add("completed-task-card");
         toggleDoneInput.checked = true;
     }
+
+    taskCard.addEventListener("click", (event) => {
+        if (event.target.type === "checkbox") {
+            return;
+        }
+
+        openTaskModal(task);
+    });
 
     taskCard.appendChild(toggleDoneInput);
 

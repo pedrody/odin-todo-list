@@ -479,6 +479,16 @@ function openTaskModal(task) {
     descriptionLabel.textContent = "Description:";
     descriptionLabel.htmlFor = description.id;
 
+    const dueDate = document.createElement("input");
+    dueDate.type = "date";
+    dueDate.id = "task-due-date";
+    dueDate.name = "task-due-date";
+    dueDate.value = task.dueDate;  // I don't know if this works
+    dueDate.disabled = true;
+    const dueDateLabel = document.createElement("label");
+    dueDateLabel.textContent = "Due date:";
+    dueDateLabel.htmlFor = dueDate.id;
+
     const done = document.createElement("input");
     done.type = "checkbox";
     done.id = "task-done";
@@ -519,6 +529,7 @@ function openTaskModal(task) {
         title.disabled = false;
         description.disabled = false;
         done.disabled = false;
+        dueDate.disabled = false;
 
         editBtn.hidden = true;
         saveBtn.hidden = false;
@@ -535,10 +546,12 @@ function openTaskModal(task) {
         task.title = title.value;
         task.description = description.value;
         task.done = done.checked;
+        task.dueDate = dueDate.value;
 
         title.disabled = true;
         description.disabled = true;
         done.disabled = true;
+        dueDate.disabled = true;
 
         saveBtn.hidden = true;
         editBtn.hidden = false;
@@ -557,6 +570,7 @@ function openTaskModal(task) {
 
     const titleGroup = createInputGroup(titleLabel, title);
     const descriptionGroup = createInputGroup(descriptionLabel, description);
+    const dueDateGroup = createInputGroup(dueDateLabel, dueDate);
     const ActionsGroup = document.createElement("div");
     ActionsGroup.classList.add("actions-group");
     ActionsGroup.append(deleteBtn, editBtn, saveBtn);
@@ -565,7 +579,7 @@ function openTaskModal(task) {
     checkboxGroup.classList.add("checkbox-group");
     checkboxGroup.append(doneLabel, done);
 
-    form.append(titleGroup, descriptionGroup, checkboxGroup, ActionsGroup);
+    form.append(titleGroup, descriptionGroup, checkboxGroup, dueDateGroup, ActionsGroup);
     dialog.appendChild(form);
     dialog.appendChild(closeBtn);
     document.body.appendChild(dialog);

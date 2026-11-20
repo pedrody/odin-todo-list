@@ -1,4 +1,5 @@
 import { StorageController } from "./storage.js";
+import { parseISO, startOfDay, isBefore, isToday, isTomorrow } from "date-fns";
 
 const KEY = "tasks";
 
@@ -32,6 +33,28 @@ export class Task {
 
     toggleDone() {
         this.done = !this.done;
+    }
+
+    getDueDate() {
+        return this.dueDate ? parseISO(this.dueDate) : null;
+    }
+
+    isOverdue() {
+        const dueDate = this.getDueDate();
+
+        return dueDate !== null && isBefore(dueDate, startOfDay(new Date()));
+    }
+
+    isDueToday() {
+        const dueDate = this.getDueDate();
+
+        return dueDate !== null && isToday(dueDate);
+    }
+
+    isDueTomorrow() {
+        const dueDate = this.getDueDate();
+
+        return dueDate !== null && isTomorrow(dueDate);
     }
 }
 

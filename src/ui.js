@@ -479,6 +479,16 @@ function openTaskModal(task) {
     descriptionLabel.textContent = "Description:";
     descriptionLabel.htmlFor = description.id;
 
+    const done = document.createElement("input");
+    done.type = "checkbox";
+    done.id = "task-done";
+    done.name = "task-done";
+    done.checked = task.done;
+    done.disabled = true;
+    const doneLabel = document.createElement("label");
+    doneLabel.textContent = "Done:";
+    doneLabel.htmlFor = done.id;
+
     const editBtn = document.createElement("button");
     editBtn.textContent = "Edit";
     editBtn.type = "button";
@@ -508,6 +518,7 @@ function openTaskModal(task) {
     editBtn.addEventListener("click", () => {
         title.disabled = false;
         description.disabled = false;
+        done.disabled = false;
 
         editBtn.hidden = true;
         saveBtn.hidden = false;
@@ -523,9 +534,11 @@ function openTaskModal(task) {
 
         task.title = title.value;
         task.description = description.value;
+        task.done = done.checked;
 
         title.disabled = true;
         description.disabled = true;
+        done.disabled = true;
 
         saveBtn.hidden = true;
         editBtn.hidden = false;
@@ -548,7 +561,11 @@ function openTaskModal(task) {
     ActionsGroup.classList.add("actions-group");
     ActionsGroup.append(deleteBtn, editBtn, saveBtn);
 
-    form.append(titleGroup, descriptionGroup, ActionsGroup);
+    const checkboxGroup = document.createElement("div");
+    checkboxGroup.classList.add("checkbox-group");
+    checkboxGroup.append(doneLabel, done);
+
+    form.append(titleGroup, descriptionGroup, checkboxGroup, ActionsGroup);
     dialog.appendChild(form);
     dialog.appendChild(closeBtn);
     document.body.appendChild(dialog);

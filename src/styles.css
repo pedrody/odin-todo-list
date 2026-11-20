@@ -71,7 +71,7 @@ body {
 #new-task-form input,
 #new-task-form textarea,
 #update-column-form input,
-.task-modal input,
+.task-modal input:not([type="checkbox"]),
 .task-modal textarea {
     padding: 4px;
     margin-bottom: 8px;
@@ -324,4 +324,9 @@ body {
 .actions-group {
     display: flex;
     justify-content: space-between;
+}
+
+.checkbox-group {
+    display: flex;
+    gap: 4px;
 }

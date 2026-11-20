@@ -1,7 +1,7 @@
 import trashIcon from "./trash.svg";
 import pencilIcon from "./pencil.svg";
 import { addColumn, getColumnsByProjectId, removeColumn, updateColumn } from "./column.js";
-import { getProjects, addProject, getProject, removeProject, updateProject } from "./project.js";
+import { getProjects, addProject, getProject, removeProject, updateProject, getProjectByTaskId } from "./project.js";
 import { addTask, getTasks, updateTask } from "./task.js";
 
 export function renderProjects() {
@@ -451,6 +451,97 @@ function renderTasks(tasksDiv, columnId) {
     });
 }
 
+function openTaskModal(task) {
+    const dialog = document.createElement("dialog");
+    dialog.classList.add("task-modal");
+
+    const form = document.createElement("form");
+
+    const heading = document.createElement("h1");
+    heading.textContent = task.title;
+
+    const title = document.createElement("input");
+    title.id = "task-title";
+    title.name = "task-title";
+    title.value = task.title;
+    title.disabled = true;
+    title.required = true;
+
+    const titleLabel = document.createElement("label");
+    titleLabel.textContent = "Title:";
+    titleLabel.htmlFor = title.id;
+
+    const description = document.createElement("textarea");
+    description.id = "task-description";
+    description.name = "task-description";
+    description.value = task.description;
+    description.disabled = true;
+
+    const descriptionLabel = document.createElement("label");
+    descriptionLabel.textContent = "Description:";
+    descriptionLabel.htmlFor = description.id;
+
+    const editBtn = document.createElement("button");
+    editBtn.textContent = "Edit";
+    editBtn.type = "button";
+
+    const saveBtn = document.createElement("button");
+    saveBtn.textContent = "Save";
+    saveBtn.type = "submit";
+    saveBtn.hidden = true;
+
+    const closeBtn = document.createElement("button");
+    closeBtn.textContent = "Close";
+    closeBtn.type = "button";
+
+    closeBtn.addEventListener("click", () => {
+        dialog.close();
+    });
+
+    editBtn.addEventListener("click", () => {
+        title.disabled = false;
+        description.disabled = false;
+
+        editBtn.hidden = true;
+        saveBtn.hidden = false;
+    });
+
+    form.addEventListener("submit", (event) => {
+        event.preventDefault();
+
+        if (!title.value.trim()) {
+            title.focus();
+            return;
+        }
+
+        task.title = title.value;
+        task.description = description.value;
+
+        title.disabled = true;
+        description.disabled = true;
+
+        saveBtn.hidden = true;
+        editBtn.hidden = false;
+
+        updateTask(task);
+        const project = getProjectByTaskId(task.id);
+        setupKanban(project.id);
+    });
+
+    form.appendChild(titleLabel);
+    form.appendChild(title);
+    form.appendChild(descriptionLabel);
+    form.appendChild(description);
+    form.appendChild(editBtn);
+    form.appendChild(saveBtn);
+    form.appendChild(closeBtn);
+    dialog.appendChild(heading);
+    dialog.appendChild(form);
+    document.body.appendChild(dialog);
+
+    dialog.showModal();
+}
+
 function createTaskCard(task) {
     const taskCard = document.createElement("div");
     taskCard.classList.add("task-card");
@@ -469,6 +560,10 @@ function createTaskCard(task) {
         taskCard.classList.add("completed-task-card");
         toggleDoneInput.checked = true;
     }
+
+    taskCard.addEventListener("click", () => {
+        openTaskModal(task);
+    });
 
     taskCard.appendChild(toggleDoneInput);
 

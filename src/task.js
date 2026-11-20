@@ -11,8 +11,7 @@ export class Task {
         id = crypto.randomUUID(),
         done = false,
         dueDate = null,
-        priority = 0,
-        checklist = []
+        priority = 0
     ) {
         this.id = id;
         this.title = title;
@@ -21,14 +20,13 @@ export class Task {
         this.done = done;
         this.dueDate = dueDate;
         this.priority = priority;
-        this.checklist = checklist;
     }
 
     static fromJSON({
         id, title, description, columnId,
-        done, dueDate, priority, checklist
+        done, dueDate, priority
     }) {
-        return new Task(title, description, columnId, id, done, dueDate, priority, checklist);
+        return new Task(title, description, columnId, id, done, dueDate, priority);
     }
 
     toggleDone() {

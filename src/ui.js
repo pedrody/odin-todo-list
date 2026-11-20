@@ -579,7 +579,7 @@ function openTaskModal(task) {
     checkboxGroup.classList.add("checkbox-group");
     checkboxGroup.append(doneLabel, done);
 
-    form.append(titleGroup, descriptionGroup, checkboxGroup, dueDateGroup, ActionsGroup);
+    form.append(titleGroup, descriptionGroup, dueDateGroup, checkboxGroup, ActionsGroup);
     dialog.appendChild(form);
     dialog.appendChild(closeBtn);
     document.body.appendChild(dialog);
@@ -598,6 +598,12 @@ function createInputGroup(label, input) {
 function createTaskCard(task) {
     const taskCard = document.createElement("div");
     taskCard.classList.add("task-card");
+
+    if (task.isDueToday() || task.isDueTomorrow()) {
+        taskCard.classList.add("due-today-tomorrow");
+    } else if (task.isOverdue()) {
+        taskCard.classList.add("overdue");
+    }
 
     const title = document.createElement("h3");
     title.textContent = task.title;

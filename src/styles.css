@@ -70,7 +70,9 @@ body {
 #new-column-form input,
 #new-task-form input,
 #new-task-form textarea,
-#update-column-form input {
+#update-column-form input,
+.task-modal input,
+.task-modal textarea {
     padding: 4px;
     margin-bottom: 8px;
 }
@@ -193,7 +195,8 @@ body {
 }
 
 
-.project-info img:hover {
+.project-info img:hover,
+.close-modal-btn:hover {
     cursor: pointer;
     opacity: 0.7;
 }
@@ -203,7 +206,8 @@ body {
 #new-project-form button,
 #new-column-form button,
 #new-task-form button,
-#update-column-form button {
+#update-column-form button,
+.task-modal .actions-group button {
     background-color: #191919;
     border: none;
     color: #ffffff;
@@ -216,7 +220,8 @@ body {
 #new-project-form button:hover,
 #new-column-form button:hover,
 #new-task-form button:hover,
-#update-column-form button:hover {
+#update-column-form button:hover,
+.task-modal .actions-group button:hover {
     background-color: #3c3c3c;
     cursor: pointer;
 }
@@ -250,7 +255,8 @@ body {
     width: 100%;
 }
 
-#new-task-form textarea {
+#new-task-form textarea,
+.task-modal textarea {
     resize: none;
 }
 
@@ -273,4 +279,37 @@ body {
 
 .column-info button:hover {
     cursor: pointer;
+}
+
+.task-modal {
+    position: relative;
+    width: 400px;
+    margin: auto;
+    border: none;
+    border-radius: 8px;
+    padding: 32px;
+}
+
+.close-modal-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background-color: transparent;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    color: #191919;
+    font-weight: bold;
+}
+
+.task-modal form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
 }

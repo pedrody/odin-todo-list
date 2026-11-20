@@ -457,9 +457,6 @@ function openTaskModal(task) {
 
     const form = document.createElement("form");
 
-    const heading = document.createElement("h1");
-    heading.textContent = task.title;
-
     const title = document.createElement("input");
     title.id = "task-title";
     title.name = "task-title";
@@ -476,6 +473,7 @@ function openTaskModal(task) {
     description.name = "task-description";
     description.value = task.description;
     description.disabled = true;
+    description.rows = 8;
 
     const descriptionLabel = document.createElement("label");
     descriptionLabel.textContent = "Description:";
@@ -491,8 +489,10 @@ function openTaskModal(task) {
     saveBtn.hidden = true;
 
     const closeBtn = document.createElement("button");
-    closeBtn.textContent = "Close";
+    closeBtn.textContent = "x";
     closeBtn.type = "button";
+    closeBtn.classList.add("close-modal-btn");
+    closeBtn.setAttribute("aria-label", "Close window");
 
     closeBtn.addEventListener("click", () => {
         dialog.close();
@@ -528,18 +528,26 @@ function openTaskModal(task) {
         setupKanban(project.id);
     });
 
-    form.appendChild(titleLabel);
-    form.appendChild(title);
-    form.appendChild(descriptionLabel);
-    form.appendChild(description);
-    form.appendChild(editBtn);
-    form.appendChild(saveBtn);
-    form.appendChild(closeBtn);
-    dialog.appendChild(heading);
+    const titleGroup = createInputGroup(titleLabel, title);
+    const descriptionGroup = createInputGroup(descriptionLabel, description);
+    const ActionsGroup = document.createElement("div");
+    ActionsGroup.classList.add("actions-group");
+    ActionsGroup.append(editBtn, saveBtn);
+
+    form.append(titleGroup, descriptionGroup, ActionsGroup);
     dialog.appendChild(form);
+    dialog.appendChild(closeBtn);
     document.body.appendChild(dialog);
 
     dialog.showModal();
+}
+
+function createInputGroup(label, input) {
+    const group = document.createElement("div");
+    group.classList.add("input-group");
+    group.append(label, input);
+
+    return group;
 }
 
 function createTaskCard(task) {

@@ -600,7 +600,11 @@ function createTaskCard(task) {
         toggleDoneInput.checked = true;
     }
 
-    taskCard.addEventListener("click", () => {
+    taskCard.addEventListener("click", (event) => {
+        if (event.target.type === "checkbox") {
+            return;
+        }
+
         openTaskModal(task);
     });
 

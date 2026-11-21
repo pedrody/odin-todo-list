@@ -479,16 +479,10 @@ function openTaskModal(task) {
     descriptionLabel.textContent = "Description:";
     descriptionLabel.htmlFor = description.id;
 
-    // select com options
-    // options terão value de acordo com a prioridade
-    // ex.: <option value="0">Low</option>
-    // converter para inteiro antes de adicionar no objeto
     const priority = document.createElement("select");
     priority.id = "task-priority";
     priority.name = "task-priority";
     priority.disabled = true;
-    // como vou setar o value para o valor que está na task?
-    // ex.: priority.value = task.priority (0, 1, 2) isso funciona?
 
     const lowPriority = document.createElement("option");
     lowPriority.textContent = "Low";
@@ -515,6 +509,23 @@ function openTaskModal(task) {
     const dueDateLabel = document.createElement("label");
     dueDateLabel.textContent = "Due date:";
     dueDateLabel.htmlFor = dueDate.id;
+
+    const column = document.createElement("select");
+    column.id = "task-column";
+    column.name = "task-column";
+    column.disabled = true;
+    const columnLabel = document.createElement("label");
+    columnLabel.textContent = "Column:";
+    columnLabel.htmlFor = column.id;
+
+    const project = getProjectByTaskId(task.id);
+    const columns = getColumnsByProjectId(project.id);
+    columns.forEach((col) => {
+        const option = document.createElement("option");
+        option.value = col.id;
+        option.text = col.title;
+        column.appendChild(option);
+    });
 
     const done = document.createElement("input");
     done.type = "checkbox";
@@ -558,6 +569,7 @@ function openTaskModal(task) {
         done.disabled = false;
         dueDate.disabled = false;
         priority.disabled = false;
+        column.disabled = false;
 
         editBtn.hidden = true;
         saveBtn.hidden = false;
@@ -576,12 +588,14 @@ function openTaskModal(task) {
         task.done = done.checked;
         task.dueDate = dueDate.value;
         task.priority = Number(priority.value);
+        task.columnId = column.value;
 
         title.disabled = true;
         description.disabled = true;
         done.disabled = true;
         dueDate.disabled = true;
         priority.disabled = true;
+        column.disabled = true;
 
         saveBtn.hidden = true;
         editBtn.hidden = false;
@@ -605,10 +619,13 @@ function openTaskModal(task) {
     priority.append(lowPriority, mediumPriority, highPriority);
     priority.value = task.priority;
 
+    column.value = task.columnId;
+
     const titleGroup = createInputGroup(titleLabel, title);
     const descriptionGroup = createInputGroup(descriptionLabel, description);
     const dueDateGroup = createInputGroup(dueDateLabel, dueDate);
     const priorityGroup = createInputGroup(priorityLabel, priority);
+    const columnGroup = createInputGroup(columnLabel, column);
     const ActionsGroup = document.createElement("div");
     ActionsGroup.classList.add("actions-group");
     ActionsGroup.append(deleteBtn, editBtn, saveBtn);
@@ -617,7 +634,7 @@ function openTaskModal(task) {
     checkboxGroup.classList.add("checkbox-group");
     checkboxGroup.append(doneLabel, done);
 
-    form.append(titleGroup, descriptionGroup, priorityGroup, dueDateGroup, checkboxGroup, ActionsGroup);
+    form.append(titleGroup, descriptionGroup, priorityGroup, columnGroup, dueDateGroup, checkboxGroup, ActionsGroup);
     dialog.appendChild(form);
     dialog.appendChild(closeBtn);
     document.body.appendChild(dialog);

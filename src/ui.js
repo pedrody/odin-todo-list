@@ -508,7 +508,7 @@ function openTaskModal(task) {
     dueDate.type = "date";
     dueDate.id = "task-due-date";
     dueDate.name = "task-due-date";
-    dueDate.value = task.dueDate;  // I don't know if this works
+    dueDate.value = task.dueDate;
     dueDate.disabled = true;
     const dueDateLabel = document.createElement("label");
     dueDateLabel.textContent = "Due date:";

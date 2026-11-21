@@ -29,9 +29,9 @@ export function getColumnsByProjectId(projectId) {
     return getColumns().filter((column) => column.projectId === projectId);
 }
 
-export function addColumn(title, projectId) {
+export function addColumn(column) {
     const columns = getColumns();
-    columns.push(new Column(title, projectId));
+    columns.push(column);
     StorageController.add(KEY, columns);
 }
 

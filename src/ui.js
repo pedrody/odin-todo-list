@@ -612,6 +612,10 @@ function openTaskModal(task) {
         setupKanban(project.id);
     });
 
+    dialog.addEventListener("close", () => {
+        dialog.remove();
+    });
+
     priority.append(lowPriority, mediumPriority, highPriority);
     priority.value = task.priority;
 

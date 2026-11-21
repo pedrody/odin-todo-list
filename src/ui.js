@@ -1,8 +1,8 @@
 import trashIcon from "./trash.svg";
 import pencilIcon from "./pencil.svg";
-import { addColumn, getColumnsByProjectId, removeColumn, updateColumn } from "./column.js";
-import { getProjects, addProject, getProject, removeProject, updateProject, getProjectByTaskId } from "./project.js";
-import { addTask, getTasks, removeTask, updateTask } from "./task.js";
+import { addColumn, Column, getColumnsByProjectId, removeColumn, updateColumn } from "./column.js";
+import { getProjects, addProject, getProject, removeProject, updateProject, getProjectByTaskId, Project } from "./project.js";
+import { addTask, getTasks, removeTask, Task, updateTask } from "./task.js";
 
 export function renderProjects() {
     const projectsDiv = document.getElementById("projects");
@@ -47,7 +47,9 @@ export function setupNewProjectBtn() {
             return;
         }
 
-        addProject(projectTitle);
+        const project = new Project(projectTitle);
+
+        addProject(project);
 
         renderProjects();
         newProjectForm.reset();
@@ -180,7 +182,8 @@ function createNewColumnForm(projectId) {
             return;
         }
 
-        addColumn(title, projectId);
+        const column = new Column(title, projectId);
+        addColumn(column);
         setupKanban(projectId);
     });
 
@@ -233,7 +236,8 @@ function createNewTaskForm(tasksDiv, columnId, newTaskBtn, removeColumnBtn) {
             return;
         }
 
-        addTask(title, description, columnId);
+        const task = new Task(title, description, columnId);
+        addTask(task);
         renderTasks(tasksDiv, columnId);
         form.reset();
     });

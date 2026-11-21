@@ -66,9 +66,9 @@ export function getTasks() {
     return StorageController.get(KEY, Task.fromJSON);
 }
 
-export function addTask(title, description, columnId) {
+export function addTask(task) {
     const tasks = getTasks();
-    tasks.unshift(new Task(title, description, columnId));
+    tasks.unshift(task);
     StorageController.add(KEY, tasks);
 }
 

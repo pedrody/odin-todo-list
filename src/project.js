@@ -19,9 +19,9 @@ export function getProjects() {
     return StorageController.get(KEY, Project.fromJSON);
 }
 
-export function addProject(title) {
+export function addProject(project) {
     const projects = getProjects();
-    projects.push(new Project(title));
+    projects.push(project);
     StorageController.add(KEY, projects);
 }
 
